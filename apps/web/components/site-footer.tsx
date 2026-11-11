@@ -1,141 +1,152 @@
-import {
-  Briefcase,
-  Building2,
-  House,
-  Info,
-  Layers,
-  type LucideIcon,
-  Mail,
-  MapPin,
-  Newspaper,
-  Phone,
-} from "lucide-react"
+import { ArrowUp, Mail, MapPin } from "lucide-react"
 import Link from "next/link"
 
 import { cn } from "@workspace/ui/lib/utils"
 
-import { container, Logo, SocialIcon } from "@/components/brand"
-import { contact, services } from "@/lib/site-data"
-
-const quickLinks: { label: string; href: string; icon: LucideIcon }[] = [
-  { label: "Trang chủ", href: "/", icon: House },
-  { label: "Giới thiệu", href: "#gioi-thieu", icon: Info },
-  { label: "Lĩnh vực hoạt động", href: "#linh-vuc", icon: Layers },
-  { label: "Dự án tiêu biểu", href: "#du-an", icon: Building2 },
-  { label: "Tin tức", href: "#tin-tuc", icon: Newspaper },
-  { label: "Tuyển dụng", href: "#tin-tuc", icon: Briefcase },
-  { label: "Liên hệ", href: "#lien-he", icon: Phone },
-]
-
-const fieldLinks = [
-  ...services.map((s) => s.title),
-  "Thông tin công ty",
-  "Tuyển dụng",
-]
+import { container, Logo } from "@/components/brand"
+import {
+  FacebookColor,
+  InstagramColor,
+  LinkedinColor,
+  PhoneSolidIcon,
+  YoutubeColor,
+} from "@/components/icons"
+import type { Content } from "@/lib/i18n/types"
 
 const socials = [
-  { name: "facebook", label: "Facebook" },
-  { name: "youtube", label: "YouTube" },
-  { name: "linkedin", label: "LinkedIn" },
-] as const
+  { label: "Facebook", icon: FacebookColor },
+  { label: "YouTube", icon: YoutubeColor },
+  { label: "Instagram", icon: InstagramColor },
+  { label: "LinkedIn", icon: LinkedinColor },
+]
 
-const heading = "mb-3 text-[13px] font-semibold text-white"
-const linkCls =
-  "text-[12px] text-white/70 transition-colors hover:text-brand-lime"
+export function SiteFooter({ t }: { t: Content }) {
+  const { company, ui, nav } = t
+  const groups = nav.filter((n) => n.children)
+  const singles = nav.filter((n) => !n.children)
 
-export function SiteFooter() {
   return (
-    <footer id="lien-he" className="scroll-mt-20 bg-brand-deep text-white">
+    <footer className="bg-brand-deep pb-16 text-white md:pb-0">
       <div
         className={cn(
           container,
-          "grid gap-10 py-10 sm:grid-cols-2 lg:grid-cols-[1fr_1.5fr_1.5fr_1.35fr] lg:gap-0 lg:py-6"
+          "grid gap-12 py-14 lg:grid-cols-[260px_1fr] lg:gap-16"
         )}
       >
-        <div className="lg:pt-2">
-          <Logo variant="light" />
+        <div>
+          <Logo variant="light" href={`/${t.locale}`} />
+          <p className="mt-5 text-base font-bold">{company.legalName}</p>
+          <address className="mt-4 space-y-3 text-[14px] text-white/80 not-italic">
+            <p className="flex gap-2.5">
+              <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+              {company.address}
+            </p>
+            <p>
+              <a
+                href={company.phoneHref}
+                className="flex items-center gap-2.5 hover:text-brand-lime"
+              >
+                <PhoneSolidIcon className="size-3.5 shrink-0" />
+                {company.phone}
+              </a>
+            </p>
+            <p>
+              <a
+                href={`mailto:${company.email}`}
+                className="flex items-center gap-2.5 hover:text-brand-lime"
+              >
+                <Mail className="size-3.5 shrink-0" aria-hidden="true" />
+                {company.email}
+              </a>
+            </p>
+          </address>
         </div>
 
-        <div className="lg:px-8">
-          <h2 className={heading}>Liên kết nhanh</h2>
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-2">
-            {quickLinks.map(({ label, href, icon: Icon }) => (
-              <li key={label}>
-                <Link href={href} className={cn(linkCls, "flex items-center gap-2")}>
-                  <Icon className="size-3.5 shrink-0" aria-hidden="true" />
-                  {label}
+        <nav
+          aria-label={ui.siteMap}
+          className="grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-5"
+        >
+          <ul className="space-y-4">
+            {singles.map((item) => (
+              <li key={item.label}>
+                <Link
+                  href={item.href}
+                  className="text-base font-bold hover:text-brand-lime"
+                >
+                  {item.label}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
-
-        <div className="lg:border-l lg:border-white/15 lg:px-8">
-          <h2 className={heading}>Lĩnh vực hoạt động</h2>
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-2">
-            {fieldLinks.map((label) => (
-              <li key={label}>
-                <Link href="#linh-vuc" className={linkCls}>
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="lg:border-l lg:border-white/15 lg:pl-8">
-          <h2 className={heading}>Liên hệ</h2>
-          <div className="flex items-start justify-between gap-4">
-            <address className="space-y-2.5 text-[12px] text-white/75 not-italic">
-              <p className="flex gap-2.5">
-                <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-                {contact.address}
-              </p>
-              <p>
-                <a
-                  href={contact.phoneHref}
-                  className="flex items-center gap-2.5 hover:text-brand-lime"
-                >
-                  <Phone className="size-3.5 shrink-0" aria-hidden="true" />
-                  {contact.phone}
-                </a>
-              </p>
-              <p>
-                <a
-                  href={`mailto:${contact.email}`}
-                  className="flex items-center gap-2.5 hover:text-brand-lime"
-                >
-                  <Mail className="size-3.5 shrink-0" aria-hidden="true" />
-                  {contact.email}
-                </a>
-              </p>
-            </address>
-            <ul className="flex shrink-0 items-center gap-3">
-              {socials.map((s) => (
-                <li key={s.name}>
-                  <a
-                    href="#"
-                    aria-label={s.label}
-                    className="grid size-7 place-items-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-brand-lime"
-                  >
-                    <SocialIcon name={s.name} className="size-4" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+          {groups.map((g) => (
+            <div key={g.label}>
+              <Link
+                href={g.href}
+                className="text-base font-bold hover:text-brand-lime"
+              >
+                {g.label}
+              </Link>
+              <ul className="mt-4 space-y-2.5">
+                {g.children!.map((c) => (
+                  <li key={c.label}>
+                    <Link
+                      href={c.href}
+                      className="text-[14px] text-white/70 hover:text-brand-lime"
+                    >
+                      {c.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
       </div>
 
       <div className="border-t border-white/10">
         <div
           className={cn(
             container,
-            "flex flex-col gap-1 py-3.5 text-[11px] text-white/70 sm:flex-row sm:items-center sm:justify-between"
+            "flex flex-wrap items-center justify-between gap-4 py-5"
           )}
         >
-          <p>© 2026 TRANEX Co., Ltd. All rights reserved.</p>
-          <p className="italic">Build Today for a Sustainable Tomorrow</p>
+          <div className="flex items-center gap-5">
+            <ul className="flex items-center gap-3">
+              {socials.map(({ label, icon: Icon }) => (
+                <li key={label}>
+                  <a
+                    href="#"
+                    aria-label={label}
+                    className="grid size-9 place-items-center rounded-full bg-white transition-transform hover:-translate-y-0.5"
+                  >
+                    <Icon className="size-5" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <ul className="hidden items-center gap-3 text-[13px] text-white/65 sm:flex">
+              {ui.policies.map((p, i) => (
+                <li key={p} className="flex items-center gap-3">
+                  {i > 0 && <span aria-hidden="true">|</span>}
+                  <Link href="#" className="hover:text-white">
+                    {p}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex items-center gap-5">
+            <p className="font-en text-[12px] text-white/65">
+              © 2026 TRANEX Co., Ltd. All rights reserved.
+            </p>
+            <a
+              href="#top"
+              aria-label={ui.backToTop}
+              className="grid size-9 place-items-center rounded-[3px] bg-white/10 transition-colors hover:bg-brand"
+            >
+              <ArrowUp className="size-4" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -47,8 +47,10 @@
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
-    --font-sans: var(--font-sans);
-    --font-script: var(--font-script);
+    --font-sans: var(--font-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    --font-en: var(--font-en), var(--font-sans), sans-serif;
+    --font-script: var(--font-script), cursive;
+    --font-serif: var(--font-serif), var(--font-serif-jp), "Hiragino Mincho ProN", "Yu Mincho", serif;
     --color-brand: var(--brand);
     --color-brand-dark: var(--brand-dark);
     --color-brand-deep: var(--brand-deep);
@@ -130,11 +132,25 @@
     --sidebar-ring: oklch(0.556 0 0);
 }
 
+@keyframes scroll-cue {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(200%); }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
     }
   body {
     @apply bg-background text-foreground;
+    /* Reference type rhythm: 16px / 1.7, medium weight, slight tracking. */
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    }
+  /* Proportional Japanese punctuation (tighter 、。「」) like YakuHanJP. */
+  :lang(ja) body {
+    font-feature-settings: "palt";
     }
 }

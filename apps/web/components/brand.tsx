@@ -29,16 +29,18 @@ export function LogoMark({ className }: { className?: string }) {
 
 export function Logo({
   variant = "dark",
+  href = "/",
   className,
 }: {
   variant?: "dark" | "light"
+  href?: string
   className?: string
 }) {
   const light = variant === "light"
   return (
     <Link
-      href="/"
-      aria-label="TRANEX – Trang chủ"
+      href={href}
+      aria-label="TRANEX"
       className={cn("flex items-center gap-2.5", className)}
     >
       <LogoMark className="size-11" />
@@ -138,7 +140,7 @@ export function Eyebrow({
   return (
     <p
       className={cn(
-        "flex items-center gap-2 text-xs font-semibold tracking-wide text-brand uppercase",
+        "flex items-center gap-2 font-en text-sm font-bold tracking-wide text-brand uppercase",
         className
       )}
     >
@@ -149,3 +151,79 @@ export function Eyebrow({
 }
 
 export const container = "mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-12"
+
+/** Small solid square with an arrow — the site's signature link affordance. */
+export function ArrowBox({
+  className,
+  tone = "brand",
+}: {
+  className?: string
+  tone?: "brand" | "white" | "dark"
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "grid size-[26px] shrink-0 place-items-center rounded-[3px] transition-transform group-hover:translate-x-0.5",
+        tone === "brand" && "bg-brand text-white",
+        tone === "white" && "bg-white text-brand",
+        tone === "dark" && "bg-brand-deep text-white",
+        className
+      )}
+    >
+      <svg viewBox="0 0 16 16" className="size-3.5" fill="none">
+        <path
+          d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  )
+}
+
+/** Section title with a short dark underline, as on Japanese corporate sites. */
+export function SectionHeading({
+  title,
+  sub,
+  id,
+  className,
+}: {
+  title: string
+  sub?: string
+  id?: string
+  className?: string
+}) {
+  return (
+    <div className={className}>
+      <h2
+        id={id}
+        className="inline-block border-b-2 border-brand-dark pb-2 text-[26px] leading-[1.4] font-bold tracking-wide text-brand-dark sm:text-[32px]"
+      >
+        {title}
+      </h2>
+      {sub && <p className="mt-3 text-base text-neutral-600">{sub}</p>}
+    </div>
+  )
+}
+
+/** Renders text lines separated by <br />. */
+export function Lines({ lines }: { lines: string[] }) {
+  return lines.map((line, i) => (
+    <span key={line}>
+      {i > 0 && <br />}
+      {line}
+    </span>
+  ))
+}
+
+/** Small outlined tag used on news / story cards. */
+export function Tag({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-block rounded-[2px] border border-brand/60 px-2 py-0.5 text-[12.5px] leading-tight font-medium text-brand">
+      {children}
+    </span>
+  )
+}
