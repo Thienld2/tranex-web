@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation"
 
 import { Hero } from "@/components/hero"
-import { Challenge } from "@/components/home/challenge"
-import { Company, Pickup } from "@/components/home/company"
+import { Company, CompanyLinks, Pickup } from "@/components/home/company"
 import { ContactCta } from "@/components/home/contact-cta"
 import { NewsEvents } from "@/components/home/news-events"
 import { BuildingTypes, Solutions } from "@/components/home/solutions"
@@ -33,11 +32,11 @@ export default async function Page({
       <SideTabs t={t} />
       <main>
         <Hero hero={t.hero} closeLabel={t.ui.closeNotice} />
-        <NewsEvents t={t} />
         <Solutions t={t} />
         <BuildingTypes t={t} />
-        <Challenge t={t} />
         <Company t={t} />
+        <NewsEvents t={t} />
+        <CompanyLinks t={t} />
         <Pickup t={t} />
         <ContactCta t={t} />
       </main>

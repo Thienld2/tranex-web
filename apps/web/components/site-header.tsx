@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight, ChevronDown, ExternalLink, House } from "lucide-react"
+import { ArrowRight, ChevronDown, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
@@ -142,7 +142,6 @@ export function SiteHeader({
                     )}
                     <NavTrigger
                       item={item}
-                      isHome={i === 0}
                       isActive={item.href === activeHref}
                       open={mega === i}
                       onDark={onDark}
@@ -189,6 +188,7 @@ export function SiteHeader({
           <MegaPanel
             key={openItem.label}
             item={openItem}
+            locale={locale}
             company={company}
             ui={ui}
             onNavigate={() => setMega(null)}
@@ -210,7 +210,6 @@ export function SiteHeader({
 
 function NavTrigger({
   item,
-  isHome,
   isActive,
   open,
   onDark,
@@ -218,8 +217,6 @@ function NavTrigger({
   onToggle,
 }: {
   item: NavItem
-  /** The home link — shown with a house icon. */
-  isHome: boolean
   /** Link to the current page — coloured and underlined. */
   isActive: boolean
   open: boolean
@@ -250,7 +247,6 @@ function NavTrigger({
             : hover
         )}
       >
-        {isHome && <House className="size-4" aria-hidden="true" />}
         {item.label}
         {item.external && <ExternalLink className="size-3.5" aria-hidden="true" />}
       </Link>
@@ -276,11 +272,13 @@ function NavTrigger({
 
 function MegaPanel({
   item,
+  locale,
   company,
   ui,
   onNavigate,
 }: {
   item: NavItem
+  locale: Locale
   company: Content["company"]
   ui: Content["ui"]
   onNavigate: () => void
@@ -327,12 +325,13 @@ function MegaPanel({
 
         <div className="space-y-2 bg-brand/10 p-5">
           <CtaCard
-            href={`mailto:${company.email}?subject=${encodeURIComponent(ui.requestProfileSubject)}`}
+            href={`/${locale}/lien-he#form-profile`}
+            onClick={onNavigate}
             icon={<BookIcon className="size-7" strokeWidth={1.6} />}
             label={ui.requestProfile}
           />
           <CtaCard
-            href="#lien-he"
+            href={`/${locale}/lien-he#form-consult`}
             onClick={onNavigate}
             icon={<MailIcon className="size-7" strokeWidth={1.6} />}
             label={ui.contactConsult}

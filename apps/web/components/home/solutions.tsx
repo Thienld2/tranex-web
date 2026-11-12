@@ -14,43 +14,12 @@ import {
 import { Reveal } from "@/components/reveal"
 import type { Content } from "@/lib/i18n/types"
 
-/** Big consulting banner + service cards. */
+/** Service cards ("Giải pháp toàn diện…") followed by the consulting banner. */
 export function Solutions({ t }: { t: Content }) {
   const { consulting, services } = t
   return (
     <section id="giai-phap" className="scroll-mt-24 bg-white">
-      <Reveal className="px-2.5">
-        <div className="relative isolate overflow-hidden rounded-[4px]">
-          <Image
-            src={consulting.image}
-            alt={consulting.imageAlt}
-            fill
-            sizes="100vw"
-            className="-z-10 object-cover"
-          />
-          <div className="absolute inset-0 -z-10 bg-linear-to-r from-brand-deep/90 via-brand-deep/60 to-brand-deep/10" />
-          <div className="px-6 py-16 sm:px-10 lg:px-16 lg:py-24">
-            <p className="text-base font-bold tracking-wide text-white/90">
-              {consulting.label}
-            </p>
-            <h2 className="mt-5 text-[28px] leading-[1.45] font-bold tracking-wide text-white sm:text-[40px] lg:text-[48px]">
-              <Lines lines={consulting.titleLines} />
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-[1.9] text-white/90">
-              {consulting.description}
-            </p>
-            <Link
-              href="#giai-phap"
-              className="group mt-9 inline-flex items-center gap-12 rounded-[3px] bg-brand px-6 py-4 text-base font-bold text-white transition-colors hover:bg-[#17a058]"
-            >
-              {t.ui.viewDetails}
-              <ArrowBox tone="white" />
-            </Link>
-          </div>
-        </div>
-      </Reveal>
-
-      <div className={cn(container, "pt-14 pb-10")}>
+      <div className={cn(container, "pt-14 pb-12 lg:pt-16")}>
         <Reveal className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div>
             <Eyebrow>{services.eyebrow}</Eyebrow>
@@ -60,14 +29,14 @@ export function Solutions({ t }: { t: Content }) {
           </div>
           <Link
             href="#giai-phap"
-            className="group inline-flex items-center gap-2 text-base font-bold text-brand-dark hover:text-brand"
+            className="group flex min-w-[300px] items-center justify-between gap-12 rounded-[2px] border border-neutral-300 bg-white px-6 py-5 text-[17px] font-bold text-neutral-800 transition-colors hover:border-brand hover:text-brand sm:min-w-[340px]"
           >
             {services.viewAll}
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            <ArrowBox className="size-7" />
           </Link>
         </Reveal>
 
-        <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:gap-3.5">
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3 xl:grid-cols-5 xl:gap-3.5">
           {services.items.map((s, i) => {
             const Icon = s.icon
             return (
@@ -108,33 +77,64 @@ export function Solutions({ t }: { t: Content }) {
           })}
         </ul>
       </div>
+
+      <Reveal className="px-2.5 pb-8">
+        <div className="relative isolate overflow-hidden rounded-[4px]">
+          <Image
+            src={consulting.image}
+            alt={consulting.imageAlt}
+            fill
+            sizes="100vw"
+            className="-z-10 object-cover"
+          />
+          <div className="absolute inset-0 -z-10 bg-linear-to-r from-brand-deep/90 via-brand-deep/60 to-brand-deep/10" />
+          <div className="px-6 py-16 sm:px-10 lg:px-16 lg:py-24">
+            <p className="text-base font-bold tracking-wide text-white/90">
+              {consulting.label}
+            </p>
+            <h2 className="mt-5 text-[28px] leading-[1.45] font-bold tracking-wide text-white sm:text-[40px] lg:text-[48px]">
+              <Lines lines={consulting.titleLines} />
+            </h2>
+            <p className="mt-6 max-w-xl text-base leading-[1.9] text-white/90">
+              {consulting.description}
+            </p>
+            <Link
+              href="#giai-phap"
+              className="group mt-9 inline-flex items-center gap-12 rounded-[3px] bg-brand px-6 py-4 text-base font-bold text-white transition-colors hover:bg-[#17a058]"
+            >
+              {t.ui.viewDetails}
+              <ArrowBox tone="white" />
+            </Link>
+          </div>
+        </div>
+      </Reveal>
     </section>
   )
 }
 
-/** Building-type tile grid + two support cards + crane banner. */
+/** Building-type tile grid + two support cards. */
 export function BuildingTypes({ t }: { t: Content }) {
   const { buildingTypes } = t
   return (
     <section id="cong-trinh" className="scroll-mt-24 bg-white pt-8 pb-16">
       <div className={container}>
-        <Reveal className="flex flex-wrap items-end justify-between gap-6">
+        <Reveal className="flex flex-wrap items-start justify-between gap-6">
           <SectionHeading title={buildingTypes.title} sub={buildingTypes.sub} />
           <Link
             href="#cong-trinh"
-            className="group flex items-center gap-12 border border-neutral-300 px-5 py-3.5 text-[15px] font-bold text-neutral-800 hover:border-brand"
+            className="group flex min-w-[300px] items-center justify-between gap-12 rounded-[2px] border border-neutral-300 bg-white px-6 py-5 text-[17px] font-bold text-neutral-800 transition-colors hover:border-brand hover:text-brand sm:min-w-[340px]"
           >
             {buildingTypes.viewAll}
-            <ArrowBox />
+            <ArrowBox className="size-7" />
           </Link>
         </Reveal>
 
-        <ul className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 lg:gap-4">
+        <ul className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:mt-10 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-6">
           {buildingTypes.items.map((b, i) => (
             <Reveal as="li" key={b.title} delay={(i % 4) * 80}>
               <Link
                 href="#cong-trinh"
-                className="group relative block aspect-square overflow-hidden rounded-[3px] bg-neutral-200"
+                className="group relative block aspect-square overflow-hidden rounded-[6px] bg-neutral-200"
               >
                 <Image
                   src={b.image}
@@ -143,13 +143,16 @@ export function BuildingTypes({ t }: { t: Content }) {
                   sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <span className="absolute inset-0 bg-linear-to-t from-black/65 via-black/5 to-transparent" />
-                <span className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
-                  <span className="text-[15px] leading-snug font-bold text-white sm:text-[17px]">
-                    {b.title}
-                  </span>
-                  <ArrowBox tone="white" />
+                <span className="absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-transparent" />
+                {/* Title: 20px from the edges, leaves room for the arrow (as the reference) */}
+                <span className="absolute right-12 bottom-3 left-3 text-[15px] leading-[1.4] font-bold tracking-[0.01em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.45)] sm:right-14 sm:bottom-5 sm:left-5 sm:text-[17px] lg:text-[18px]">
+                  {b.title}
                 </span>
+                {/* 28px white square, 15px from the corner; turns brand-green on hover */}
+                <ArrowBox
+                  tone="white"
+                  className="absolute right-2.5 bottom-2.5 size-7 transition-colors duration-300 group-hover:bg-brand group-hover:text-white sm:right-[15px] sm:bottom-[15px]"
+                />
               </Link>
             </Reveal>
           ))}
@@ -159,7 +162,7 @@ export function BuildingTypes({ t }: { t: Content }) {
           {t.support.map(({ title, description, icon: Icon }) => (
             <Reveal as="li" key={title}>
               <Link
-                href="#lien-he"
+                href={`/${t.locale}/lien-he`}
                 className="group flex items-center gap-5 border-b border-neutral-300 py-5"
               >
                 <span className="grid size-[88px] shrink-0 place-items-center bg-neutral-100 text-brand-dark">
@@ -179,18 +182,6 @@ export function BuildingTypes({ t }: { t: Content }) {
           ))}
         </ul>
       </div>
-
-      <Reveal className="mt-16 px-2.5">
-        <div className="relative h-[220px] overflow-hidden rounded-[4px] sm:h-[320px]">
-          <Image
-            src={t.crane.image}
-            alt={t.crane.alt}
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
-        </div>
-      </Reveal>
     </section>
   )
 }

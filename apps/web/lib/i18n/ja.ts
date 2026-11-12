@@ -44,14 +44,6 @@ const buildingTypes = vi.buildingTypes.items.map((b, i) => ({
   title: typeTitles[i]!,
 }))
 
-const challengeLinks: NavLink[] = [
-  { label: "プロジェクトストーリー", href: "#thu-thach" },
-  { label: "施工実績", href: "/ja/du-an" },
-  { label: "TRANEXのBIM技術", href: "#thu-thach" },
-  { label: "TRANEXスピリッツ", href: "#thu-thach" },
-  { label: "お客様の声", href: "#thu-thach" },
-]
-
 const companyLinks: NavLink[] = [
   { label: "トップメッセージ", href: "#cong-ty" },
   { label: "会社概要", href: "#cong-ty" },
@@ -97,6 +89,8 @@ export const ja: Content = {
     requestProfileSubject: "会社案内資料のご請求",
     contactConsult: "お問い合わせ・ご相談",
     callNow: "電話する",
+    contactPanelTitle: "まずは、資料請求やご相談から",
+    close: "閉じる",
     policies: ["サイトポリシー", "個人情報保護方針", "サイトマップ"],
   },
   nav: [
@@ -110,16 +104,27 @@ export const ja: Content = {
     {
       label: "事業領域",
       href: "#giai-phap",
-      children: [
-        ...services.map((s) => ({ label: s.title, href: "#giai-phap" })),
-        { label: "建築カテゴリー", href: "#cong-trinh" },
-      ],
+      children: services.map((s) => ({ label: s.title, href: "#giai-phap" })),
       image: img.navSolutions,
     },
-    { label: "施工実績", href: "/ja/du-an" },
-    { label: "ニュース", href: "#tin-tuc" },
+    {
+      label: "建築カテゴリー",
+      href: "#cong-trinh",
+      children: [
+        { label: "タウンハウス", href: "#cong-trinh" },
+        { label: "邸宅・ヴィラ", href: "#cong-trinh" },
+        { label: "ホテル", href: "#cong-trinh" },
+        { label: "マンション", href: "#cong-trinh" },
+        { label: "工場", href: "#cong-trinh" },
+        { label: "高齢者施設", href: "#cong-trinh" },
+        { label: "保育園・幼稚園", href: "#cong-trinh" },
+        { label: "クリニック", href: "#cong-trinh" },
+        { label: "病院", href: "#cong-trinh" },
+      ],
+      image: img.navTypes,
+    },
     { label: "採用情報", href: "#noi-bat" },
-    { label: "お問い合わせ", href: "#lien-he" },
+    { label: "お問い合わせ", href: "/ja/lien-he" },
   ],
   sideTabs: ["資料請求・お問い合わせ", "イベント", "施工実績"],
   hero: {
@@ -214,58 +219,6 @@ export const ja: Content = {
       icon: vi.support[1]!.icon,
     },
   ],
-  crane: {
-    image: img.crane,
-    alt: "青空の下、建設現場に立つタワークレーン",
-  },
-  challenge: {
-    titleLines: ["日々の挑戦が、", "次の建物をつくる。"],
-    links: challengeLinks,
-    stories: [
-      {
-        tag: "プロジェクトストーリー",
-        title: "施工のデジタル化 ― TRANEXのBIM活用への挑戦",
-        image: img.storyBim,
-        size: "lg",
-      },
-      {
-        tag: "施工実績",
-        title: "工業団地内の工場・物流施設",
-        image: img.storyFactory,
-        size: "md",
-      },
-      {
-        tag: "TRANEXスピリッツ",
-        title: "お客様の立場で考える ― TRANEXの仕事の流儀",
-        image: img.storySpirit,
-        size: "md",
-      },
-      {
-        tag: "施工実績",
-        title: "ガラスファサードが映える複合オフィス",
-        image: img.storyOffice,
-        size: "wide",
-      },
-      {
-        tag: "お客様の声",
-        title: "海辺のリゾート ― 工期厳守、期待以上の仕上がり",
-        image: img.storyResort,
-        size: "md",
-      },
-      {
-        tag: "技術",
-        title: "改修工事のための点群データモデリング",
-        image: img.storyPointCloud,
-        size: "md",
-      },
-      {
-        tag: "施工実績",
-        title: "緑に包まれる庭付きヴィラ",
-        image: img.storyVilla,
-        size: "wide",
-      },
-    ],
-  },
   about: {
     label: "会社案内",
     titleLines: ["ひとつの建物に、", "長く続く約束を。"],
@@ -411,5 +364,53 @@ export const ja: Content = {
     relatedTitle: "その他の施工実績",
     backToList: "施工実績一覧へ戻る",
     viewDetail: "詳しく見る",
+  },
+  contactPage: {
+    metaTitle: "お問い合わせ | TRANEX",
+    metaDescription:
+      "設計・BIM・施工のご相談、会社案内資料のご請求、協力会社のご応募はこちらから。",
+    breadcrumbHome: "ホーム",
+    title: "お問い合わせ",
+    items: [
+      {
+        key: "consult",
+        title: "ご相談・お問い合わせ",
+      },
+      {
+        key: "plan",
+        title: "無料プランのご依頼",
+      },
+      {
+        key: "profile",
+        title: "資料請求",
+      },
+      {
+        key: "partner",
+        title: "協力会社様のご応募",
+      },
+    ],
+    owner: {
+      titleLines: ["TRANEXで建築された", "オーナー様はこちら"],
+      text: "お引き渡し後の保証・メンテナンス・技術サポートに関するご依頼は、カスタマーサポートまでお気軽にご連絡ください。",
+      linkLabel: "保証・技術サポート",
+      image: img.contactOwner,
+    },
+    form: {
+      title: "お問い合わせフォーム",
+      intro: "以下の項目をご入力ください。1〜2営業日以内に担当者よりご連絡いたします。",
+      name: "お名前",
+      company: "会社名・団体名",
+      email: "メールアドレス",
+      phone: "電話番号",
+      address: "建設予定地",
+      message: "お問い合わせ内容",
+      messagePlaceholder: "ご要望、規模、ご予定の時期など",
+      agree: "個人情報の取り扱いに同意する",
+      submit: "送信する",
+      note: "送信ボタンを押すと、入力内容が反映されたメールアプリが開きます。",
+      sent: "メールアプリを開きました。メールアプリで送信を押して完了してください。",
+      errRequired: "入力してください。",
+      errEmail: "メールアドレスの形式が正しくありません。",
+    },
   },
 }

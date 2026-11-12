@@ -27,7 +27,7 @@ export function ContactCta({ t }: { t: Content }) {
               <Lines lines={contactCta.lines} />
             </p>
             <Link
-              href={`mailto:${company.email}?subject=${encodeURIComponent(ui.requestProfileSubject)}`}
+              href={`/${t.locale}/lien-he#form-profile`}
               className="group mt-7 inline-flex items-center gap-3 rounded-[2px] bg-white px-4 py-3.5 sm:gap-16"
             >
               <span className="flex items-center gap-2.5 text-base font-bold text-brand-dark">
@@ -79,7 +79,7 @@ export function ContactCta({ t }: { t: Content }) {
           </Reveal>
           <Reveal delay={80}>
             <Link
-              href={`mailto:${company.email}`}
+              href={`/${t.locale}/lien-he#form-consult`}
               className="group flex h-full items-center justify-center gap-6 border border-neutral-300 px-6 py-7 hover:border-brand sm:gap-28"
             >
               <span className="flex items-center gap-2.5 text-[22px] font-bold text-neutral-800 sm:text-[29px]">

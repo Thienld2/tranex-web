@@ -8,7 +8,6 @@ export const img = {
   heroTowers: unsplash("photo-1511818966892-d7d671e672a2", 2400),
   heroFacade: unsplash("photo-1460574283810-2aab119d8511", 2400),
   consulting: unsplash("photo-1517048676732-d65bc937f952", 2000),
-  crane: unsplash("photo-1429497419816-9ca5cfb4571a", 2400),
 
   serviceDesign: unsplash("photo-1580587771525-78b9dba3b914", 900),
   serviceBim: unsplash("photo-1503387762-592deb58ef4e", 900),
@@ -27,20 +26,11 @@ export const img = {
 
   navSolutions: unsplash("photo-1517048676732-d65bc937f952", 500),
   navTypes: unsplash("photo-1600585154340-be6161a56a0c", 500),
-  navChallenge: unsplash("photo-1522071820081-009f0129c71c", 500),
   navCompany: unsplash("photo-1486406146926-c627a92ad1ab", 500),
 
   eventApartment: unsplash("photo-1545324418-cc1a3fa10c00", 700),
   eventExpo: unsplash("photo-1582268611958-ebfd161ef9cf", 700),
   notice: unsplash("photo-1582268611958-ebfd161ef9cf", 400),
-
-  storyBim: unsplash("photo-1522071820081-009f0129c71c", 1200),
-  storyFactory: unsplash("photo-1553413077-190dd305871c", 700),
-  storySpirit: unsplash("photo-1556761175-b413da4baf72", 700),
-  storyOffice: unsplash("photo-1487958449943-2429e8be8625", 1000),
-  storyResort: unsplash("photo-1566073771259-6a8506099945", 700),
-  storyPointCloud: unsplash("photo-1581094794329-c8112a89af12", 700),
-  storyVilla: unsplash("photo-1564013799919-ab600027ffc6", 1000),
 
   aboutCompany: unsplash("photo-1486406146926-c627a92ad1ab", 900),
   aboutHistory: unsplash("photo-1508450859948-4e04fabaa4ea", 900),
@@ -51,4 +41,6 @@ export const img = {
 
   brochureProfile: unsplash("photo-1600585154340-be6161a56a0c", 500),
   brochureProjects: unsplash("photo-1460574283810-2aab119d8511", 500),
+
+  contactOwner: unsplash("photo-1600596542815-ffad4c1539a9", 900),
 }

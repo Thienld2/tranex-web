@@ -22,14 +22,6 @@ export type Service = {
   icon: Icon
 }
 
-export type Story = {
-  tag: string
-  title: string
-  image: string
-  /** Layout hint for the mosaic grid. */
-  size: "lg" | "md" | "wide"
-}
-
 export type Content = {
   locale: Locale
   meta: { title: string; description: string }
@@ -61,6 +53,9 @@ export type Content = {
     requestProfileSubject: string
     contactConsult: string
     callNow: string
+    /** Heading of the slide-out contact panel. */
+    contactPanelTitle: string
+    close: string
     policies: string[]
   }
   nav: NavItem[]
@@ -93,8 +88,6 @@ export type Content = {
     items: { title: string; image: string }[]
   }
   support: { title: string; description: string; icon: Icon }[]
-  crane: { image: string; alt: string }
-  challenge: { titleLines: string[]; links: NavLink[]; stories: Story[] }
   about: {
     label: string
     titleLines: string[]
@@ -190,4 +183,32 @@ export type Content = {
     backToList: string
     viewDetail: string
   }
+  contactPage: {
+    metaTitle: string
+    metaDescription: string
+    breadcrumbHome: string
+    title: string
+    /** Contact kinds (from "#form-<kind>" links), used in the email subject. */
+    items: { key: ContactKind; title: string }[]
+    owner: { titleLines: string[]; text: string; linkLabel: string; image: string }
+    form: {
+      title: string
+      intro: string
+      name: string
+      company: string
+      email: string
+      phone: string
+      address: string
+      message: string
+      messagePlaceholder: string
+      agree: string
+      submit: string
+      note: string
+      sent: string
+      errRequired: string
+      errEmail: string
+    }
+  }
 }
+
+export type ContactKind = "consult" | "plan" | "profile" | "partner"

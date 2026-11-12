@@ -44,9 +44,17 @@ export function Company({ t }: { t: Content }) {
           </Link>
         </Reveal>
       </div>
+    </section>
+  )
+}
 
+/** Company cards (Về TRANEX, numbers, history) + company link grid. */
+export function CompanyLinks({ t }: { t: Content }) {
+  const { about } = t
+  return (
+    <section aria-label={about.label} className="bg-white">
       {/* Cards + link grid */}
-      <div className={cn(container, "py-12")}>
+      <div className={cn(container, "pt-0 pb-12 lg:pb-16")}>
         <ul className="grid gap-4 md:grid-cols-3">
           {about.cards.map((card, i) => (
             <Reveal as="li" key={card.title} delay={i * 80}>

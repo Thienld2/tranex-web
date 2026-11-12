@@ -57,14 +57,6 @@ const buildingTypes = [
   { title: "Phòng khám – Bệnh viện", image: img.typeHospital },
 ]
 
-const challengeLinks: NavLink[] = [
-  { label: "Câu chuyện dự án", href: "#thu-thach" },
-  { label: "Dự án tiêu biểu", href: "/vi/du-an" },
-  { label: "Công nghệ BIM của TRANEX", href: "#thu-thach" },
-  { label: "Tinh thần TRANEX", href: "#thu-thach" },
-  { label: "Cảm nhận khách hàng", href: "#thu-thach" },
-]
-
 const companyLinks: NavLink[] = [
   { label: "Thông điệp lãnh đạo", href: "#cong-ty" },
   { label: "Tổng quan công ty", href: "#cong-ty" },
@@ -110,12 +102,14 @@ export const vi: Content = {
     requestProfileSubject: "Yêu cầu hồ sơ năng lực",
     contactConsult: "Liên hệ tư vấn",
     callNow: "Gọi ngay",
+    contactPanelTitle: "Hãy bắt đầu bằng việc nhận hồ sơ năng lực hoặc tư vấn",
+    close: "Đóng",
     policies: ["Chính sách website", "Bảo mật thông tin", "Sơ đồ trang"],
   },
   nav: [
     { label: "Trang chủ", href: "/vi" },
     {
-      label: "Giới thiệu",
+      label: "Giới thiệu công ty",
       href: "#cong-ty",
       children: companyLinks,
       image: img.navCompany,
@@ -123,16 +117,27 @@ export const vi: Content = {
     {
       label: "Lĩnh vực hoạt động",
       href: "#giai-phap",
-      children: [
-        ...services.map((s) => ({ label: s.title, href: "#giai-phap" })),
-        { label: "Loại hình công trình", href: "#cong-trinh" },
-      ],
+      children: services.map((s) => ({ label: s.title, href: "#giai-phap" })),
       image: img.navSolutions,
     },
-    { label: "Dự án tiêu biểu", href: "/vi/du-an" },
-    { label: "Tin tức", href: "#tin-tuc" },
-    { label: "Tuyển dụng", href: "#noi-bat" },
-    { label: "Liên hệ", href: "#lien-he" },
+    {
+      label: "Danh mục kiến trúc",
+      href: "#cong-trinh",
+      children: [
+        { label: "Nhà phố", href: "#cong-trinh" },
+        { label: "Biệt thự", href: "#cong-trinh" },
+        { label: "Khách sạn", href: "#cong-trinh" },
+        { label: "Chung cư", href: "#cong-trinh" },
+        { label: "Nhà máy", href: "#cong-trinh" },
+        { label: "Viện dưỡng lão", href: "#cong-trinh" },
+        { label: "Nhà trẻ", href: "#cong-trinh" },
+        { label: "Phòng khám tư nhân", href: "#cong-trinh" },
+        { label: "Bệnh viện", href: "#cong-trinh" },
+      ],
+      image: img.navTypes,
+    },
+    { label: "Thông tin tuyển dụng", href: "#noi-bat" },
+    { label: "Liên hệ", href: "/vi/lien-he" },
   ],
   sideTabs: ["Hồ sơ năng lực · Liên hệ", "Sự kiện", "Dự án"],
   hero: {
@@ -227,58 +232,6 @@ export const vi: Content = {
       icon: HandBuildingIcon,
     },
   ],
-  crane: {
-    image: img.crane,
-    alt: "Cần cẩu tháp trên công trường giữa bầu trời xanh",
-  },
-  challenge: {
-    titleLines: ["Mỗi ngày", "một thử thách,", "mỗi công trình", "một dấu ấn."],
-    links: challengeLinks,
-    stories: [
-      {
-        tag: "Câu chuyện dự án",
-        title: "Số hóa thi công – hành trình ứng dụng BIM của TRANEX",
-        image: img.storyBim,
-        size: "lg",
-      },
-      {
-        tag: "Dự án tiêu biểu",
-        title: "Nhà máy & kho vận tại khu công nghiệp",
-        image: img.storyFactory,
-        size: "md",
-      },
-      {
-        tag: "Tinh thần TRANEX",
-        title: "Đặt mình vào vị trí khách hàng – tinh thần làm nghề của TRANEX",
-        image: img.storySpirit,
-        size: "md",
-      },
-      {
-        tag: "Dự án tiêu biểu",
-        title: "Tổ hợp văn phòng kiến trúc kính hiện đại",
-        image: img.storyOffice,
-        size: "wide",
-      },
-      {
-        tag: "Cảm nhận khách hàng",
-        title: "Khu nghỉ dưỡng ven biển – đúng tiến độ, vượt kỳ vọng",
-        image: img.storyResort,
-        size: "md",
-      },
-      {
-        tag: "Công nghệ",
-        title: "Mô hình hóa dữ liệu đám mây điểm cho công trình cải tạo",
-        image: img.storyPointCloud,
-        size: "md",
-      },
-      {
-        tag: "Dự án tiêu biểu",
-        title: "Khu biệt thự sân vườn – kiến trúc hòa cùng thiên nhiên",
-        image: img.storyVilla,
-        size: "wide",
-      },
-    ],
-  },
   about: {
     label: "Về công ty",
     titleLines: ["Mỗi công trình,", "một cam kết lâu dài."],
@@ -329,11 +282,11 @@ export const vi: Content = {
     ],
   },
   projectsPage: {
-    metaTitle: "Dự án tiêu biểu | TRANEX",
+    metaTitle: "Dự án | TRANEX",
     metaDescription:
       "Các công trình nhà ở tiêu biểu do TRANEX thiết kế và thi công: nhà phố, biệt thự, biệt thự nghỉ dưỡng, nhà vườn, nhà một tầng…",
     breadcrumbHome: "Trang chủ",
-    title: "Dự án tiêu biểu",
+    title: "Dự án",
     pickupTitle: "Dự án nổi bật",
     searchTitle: "Tìm kiếm dự án",
     filters: {
@@ -430,5 +383,53 @@ export const vi: Content = {
     relatedTitle: "Dự án khác",
     backToList: "Quay lại danh sách dự án",
     viewDetail: "Xem chi tiết",
+  },
+  contactPage: {
+    metaTitle: "Liên hệ | TRANEX",
+    metaDescription:
+      "Liên hệ TRANEX để được tư vấn thiết kế, BIM, thi công, nhận hồ sơ năng lực hoặc đăng ký trở thành đối tác.",
+    breadcrumbHome: "Trang chủ",
+    title: "Liên hệ",
+    items: [
+      {
+        key: "consult",
+        title: "Tư vấn & liên hệ",
+      },
+      {
+        key: "plan",
+        title: "Yêu cầu phương án & báo giá",
+      },
+      {
+        key: "profile",
+        title: "Nhận hồ sơ năng lực",
+      },
+      {
+        key: "partner",
+        title: "Đăng ký trở thành đối tác",
+      },
+    ],
+    owner: {
+      titleLines: ["Quý khách đã sở hữu", "công trình do TRANEX thi công?"],
+      text: "Các yêu cầu bảo hành, bảo trì và hỗ trợ kỹ thuật sau bàn giao, vui lòng liên hệ bộ phận Chăm sóc khách hàng để được hỗ trợ nhanh nhất.",
+      linkLabel: "Bảo hành & hỗ trợ kỹ thuật",
+      image: img.contactOwner,
+    },
+    form: {
+      title: "Biểu mẫu liên hệ",
+      intro: "Vui lòng điền thông tin bên dưới. TRANEX sẽ phản hồi trong vòng 1–2 ngày làm việc.",
+      name: "Họ và tên",
+      company: "Công ty / Tổ chức",
+      email: "Email",
+      phone: "Số điện thoại",
+      address: "Địa điểm công trình",
+      message: "Nội dung",
+      messagePlaceholder: "Mô tả nhu cầu, quy mô, thời gian dự kiến…",
+      agree: "Tôi đồng ý với chính sách bảo mật thông tin của TRANEX",
+      submit: "Gửi liên hệ",
+      note: "Khi bấm gửi, ứng dụng email của bạn sẽ mở với nội dung đã điền sẵn.",
+      sent: "Đã mở ứng dụng email. Vui lòng bấm Gửi trong ứng dụng email để hoàn tất.",
+      errRequired: "Vui lòng nhập mục này.",
+      errEmail: "Email không hợp lệ.",
+    },
   },
 }
