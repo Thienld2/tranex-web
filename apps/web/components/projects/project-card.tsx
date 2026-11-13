@@ -9,10 +9,13 @@ export function ProjectCard({
   project: p,
   href,
   locationLabel,
+  eager = false,
 }: {
   project: Project
   href: string
   locationLabel: string
+  /** Load immediately (the first row shares images with the pickup carousel). */
+  eager?: boolean
 }) {
   return (
     <Link
@@ -25,6 +28,7 @@ export function ProjectCard({
           alt={p.name}
           fill
           sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+          loading={eager ? "eager" : undefined}
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         {p.isNew && (

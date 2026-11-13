@@ -163,6 +163,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                 alt={project.name}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
+                loading="eager" // same file as the film intro: already downloaded
                 className="object-cover"
               />
             </div>

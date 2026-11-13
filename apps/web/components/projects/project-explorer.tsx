@@ -165,12 +165,13 @@ export function ProjectExplorer({
           </p>
         ) : (
           <ul className="mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {visible.map((p) => (
+            {visible.map((p, i) => (
               <li key={p.id}>
                 <ProjectCard
                   project={p}
                   href={`${basePath}/${p.id}`}
                   locationLabel={labels.location}
+                  eager={i < 3}
                 />
               </li>
             ))}

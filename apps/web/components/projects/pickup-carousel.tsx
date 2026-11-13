@@ -92,6 +92,7 @@ export function PickupCarousel({
                       alt={p.name}
                       fill
                       sizes="(min-width: 1024px) 380px, 340px"
+                      loading={i < 3 ? "eager" : undefined}
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </span>
