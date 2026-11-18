@@ -252,8 +252,6 @@ export type Project = {
   tagIds: string[]
   tags: string[]
   image: string
-  /** Number of storeys (parsed from the structure line). */
-  floors: number
   /** Higher-resolution source for the detail page. */
   imageLarge: string
   region: string
@@ -277,7 +275,6 @@ const localize = (p: ProjectRaw, locale: Locale): Project => ({
   tags: p.tags.map((t) => tags[t][locale]),
   image: p.image,
   imageLarge: p.image.replace("w=900", "w=1800"),
-  floors: Number(/(\d+) tầng/.exec(p.structure.vi)?.[1] ?? 1),
   isNew: !!p.isNew,
   pickup: !!p.pickup,
 })
@@ -295,28 +292,6 @@ export function getProject(locale: Locale, id: string): Project | undefined {
   return p && localize(p, locale)
 }
 
-/**
- * Extra footage for the project film: a construction-site shot and an
- * interior shot (rotated across projects so neighbours differ).
- * Replace with each project's real site / interior photos when available.
- */
-const SITE_SHOTS = [
-  "photo-1541888946425-d81bb19240f5",
-  "photo-1504307651254-35680f356dfd",
-]
-const INTERIOR_SHOTS = [
-  "photo-1600607687939-ce8a6c25118c",
-  "photo-1600566753086-00f18fb6b3ea",
-  "photo-1593696140826-c58b021acf8b",
-]
-
-export function getFilmImages(id: string) {
-  const i = Math.max(0, projects.findIndex((p) => p.id === id))
-  return {
-    site: unsplash(SITE_SHOTS[i % SITE_SHOTS.length]!, 1800),
-    interior: unsplash(INTERIOR_SHOTS[i % INTERIOR_SHOTS.length]!, 1800),
-  }
-}
 
 /** Up to `n` other projects, preferring the same category. */
 export function getRelatedProjects(locale: Locale, id: string, n = 3): Project[] {

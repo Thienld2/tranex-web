@@ -1,10 +1,7 @@
 import type { Metadata } from "next"
 import {
-  Cormorant_Garamond,
   Geist_Mono,
-  Great_Vibes,
   Noto_Sans_JP,
-  Noto_Serif_JP,
   Plus_Jakarta_Sans,
 } from "next/font/google"
 import { notFound } from "next/navigation"
@@ -26,26 +23,6 @@ const fontSans = Noto_Sans_JP({
 const fontEn = Plus_Jakarta_Sans({
   subsets: ["latin", "vietnamese"],
   variable: "--font-en",
-})
-
-// Editorial serif + handwritten script for the cinematic project film
-// ("Từ ý tưởng", "đến tổ ấm"…). Japanese falls back to a Mincho serif.
-const fontSerif = Cormorant_Garamond({
-  subsets: ["latin", "vietnamese"],
-  weight: ["500", "600", "700"],
-  variable: "--font-serif",
-})
-
-const fontSerifJp = Noto_Serif_JP({
-  weight: ["500", "700"],
-  variable: "--font-serif-jp",
-  preload: false,
-})
-
-const fontScript = Great_Vibes({
-  subsets: ["latin", "vietnamese"],
-  weight: "400",
-  variable: "--font-script",
 })
 
 const fontMono = Geist_Mono({
@@ -89,9 +66,6 @@ export default async function LocaleLayout({ children, params }: Props) {
         "scroll-smooth antialiased",
         fontSans.variable,
         fontEn.variable,
-        fontSerif.variable,
-        fontSerifJp.variable,
-        fontScript.variable,
         fontMono.variable,
         "font-sans"
       )}

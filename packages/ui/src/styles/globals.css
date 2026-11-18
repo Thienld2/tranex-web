@@ -49,8 +49,6 @@
     --radius-4xl: calc(var(--radius) * 2.6);
     --font-sans: var(--font-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
     --font-en: var(--font-en), var(--font-sans), sans-serif;
-    --font-script: var(--font-script), cursive;
-    --font-serif: var(--font-serif), var(--font-serif-jp), "Hiragino Mincho ProN", "Yu Mincho", serif;
     --color-brand: var(--brand);
     --color-brand-dark: var(--brand-dark);
     --color-brand-deep: var(--brand-deep);

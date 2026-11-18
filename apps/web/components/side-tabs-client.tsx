@@ -59,9 +59,13 @@ export function SideTabsClient({ locale, tabLabels, company, ui }: SideTabsProps
     openerRef.current?.focus()
   }
 
+  // On short screens (laptops, zoomed browsers) the tabs get tighter so all
+  // three fit in the space below the header.
   const tab =
-    "group flex w-[64px] flex-col items-center gap-3 rounded-l-lg pt-5 pb-6 text-white shadow-lg transition-all hover:w-[70px]"
-  const tabText = "text-[14px] font-bold tracking-[0.08em] [writing-mode:vertical-rl]"
+    "group flex w-[64px] shrink-0 flex-col items-center gap-3 rounded-l-lg pt-5 pb-6 text-white shadow-lg transition-all hover:w-[70px] [@media(max-height:760px)]:w-[56px] [@media(max-height:760px)]:gap-2 [@media(max-height:760px)]:pt-3 [@media(max-height:760px)]:pb-4 [@media(max-height:760px)]:hover:w-[62px]"
+  const tabText =
+    "text-[14px] font-bold tracking-[0.08em] [writing-mode:vertical-rl] [@media(max-height:760px)]:text-[12.5px] [@media(max-height:760px)]:tracking-[0.04em]"
+  const tabIcon = "size-[26px] opacity-90 [@media(max-height:760px)]:size-[22px]"
 
   return (
     <>
@@ -69,8 +73,9 @@ export function SideTabsClient({ locale, tabLabels, company, ui }: SideTabsProps
       <nav
         aria-label={ui.quickLinks}
         className={cn(
-          "fixed top-1/2 right-0 z-30 hidden -translate-y-1/2 flex-col gap-0.5 transition-opacity duration-300 md:flex",
-          open && "pointer-events-none opacity-0"
+          // Centred in the area below the fixed header, so the top tab is never hidden behind it.
+          "pointer-events-none fixed top-[76px] right-0 bottom-0 z-30 hidden flex-col justify-center gap-0.5 py-3 transition-opacity duration-300 md:flex xl:top-[96px]",
+          open ? "opacity-0" : "[&>*]:pointer-events-auto"
         )}
       >
         <button
@@ -81,15 +86,15 @@ export function SideTabsClient({ locale, tabLabels, company, ui }: SideTabsProps
           aria-controls="contact-panel"
           className={cn(tab, "bg-neutral-700/90 hover:bg-neutral-800")}
         >
-          <BookIcon className="size-[26px] opacity-90" strokeWidth={1.6} />
+          <BookIcon className={tabIcon} strokeWidth={1.6} />
           <span className={tabText}>{tabLabels[0]}</span>
         </button>
         <Link href={`/${locale}#tin-tuc`} className={cn(tab, "bg-brand hover:bg-[#17a058]")}>
-          <EventIcon className="size-[26px] opacity-90" strokeWidth={1.6} />
+          <EventIcon className={tabIcon} strokeWidth={1.6} />
           <span className={tabText}>{tabLabels[1]}</span>
         </Link>
         <Link href={`/${locale}/du-an`} className={cn(tab, "bg-brand hover:bg-[#17a058]")}>
-          <BuildingsIcon className="size-[26px] opacity-90" strokeWidth={1.6} />
+          <BuildingsIcon className={tabIcon} strokeWidth={1.6} />
           <span className={tabText}>{tabLabels[2]}</span>
         </Link>
       </nav>

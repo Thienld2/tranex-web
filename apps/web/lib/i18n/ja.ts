@@ -288,69 +288,6 @@ export const ja: Content = {
     last: "最後",
   },
   projectDetail: {
-    simTitle: "施工プロセスのシミュレーション",
-    scrollHint: "スクロールしてご覧ください",
-    skip: "スキップ",
-    introTagline: "図面から、住まいへ。",
-    plan: {
-      title: "配置図",
-      scale: "S = 1:200",
-      street: "前面道路",
-      sidewalk: "歩道",
-      sea: "海",
-      garden: "庭",
-      rooms: {
-        living: "LDK",
-        kitchen: "キッチン",
-        bed: "寝室",
-        bath: "浴室",
-        garage: "ガレージ",
-        stair: "階段",
-        terrace: "テラス",
-      },
-    },
-    scenes: [
-      {
-        label: "構想・設計",
-        before: "",
-        accent: "構想",
-        after: "から",
-        description:
-          "スケッチ、設計図面、BIM 3Dモデル。着工前に、すべてのディテールを検討します。",
-      },
-      {
-        label: "基礎・躯体",
-        before: "",
-        accent: "施工",
-        after: "へ",
-        description:
-          "基礎・柱・梁・床を施工。打設ごとにコンクリートの品質を厳しく管理します。",
-      },
-      {
-        label: "仕上げ",
-        before: "",
-        accent: "仕上げ",
-        after: "へ",
-        description:
-          "外壁・屋根・塗装・タイル・サッシ。素材が重なり、住まいがかたちになっていきます。",
-      },
-      {
-        label: "お引き渡し",
-        before: "",
-        accent: "住まい",
-        after: "へ",
-        description:
-          "竣工検査を経てお引き渡し。施主様の新しい暮らしが、ここから始まります。",
-      },
-      {
-        label: "住空間",
-        before: "ようこそ、",
-        accent: "わが家",
-        after: "へ",
-        description:
-          "光と素材、そして使いやすさが調和する、毎日を過ごす空間へ。",
-      },
-    ],
     infoTitle: "物件概要",
     fields: {
       category: "施設用途",

@@ -6,21 +6,16 @@ import { notFound } from "next/navigation"
 
 import { cn } from "@workspace/ui/lib/utils"
 
-import { container, SectionHeading, Tag } from "@/components/brand"
+import { container, SectionHeading } from "@/components/brand"
 import { ContactCta } from "@/components/home/contact-cta"
-import { ProjectFilm } from "@/components/projects/project-film"
-import { buildFloorPlan } from "@/lib/floor-plan"
+import { HouseModel3D } from "@/components/projects/house-model-3d"
 import { ProjectCard } from "@/components/projects/project-card"
 import { SideTabs } from "@/components/side-tabs"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
+import { modelText } from "@/lib/house-model"
 import { getContent, hasLocale } from "@/lib/i18n"
-import {
-  getFilmImages,
-  getProject,
-  getProjectIds,
-  getRelatedProjects,
-} from "@/lib/projects"
+import { getProject, getProjectIds, getRelatedProjects } from "@/lib/projects"
 
 type Props = { params: Promise<{ lang: string; id: string }> }
 
@@ -53,7 +48,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   const d = t.projectDetail
   const listHref = `/${lang}/du-an`
   const related = getRelatedProjects(lang, id)
-  const film = getFilmImages(id)
+  const model = modelText(lang)
 
   const info: [string, React.ReactNode][] = [
     [d.fields.category, project.category],
@@ -84,54 +79,26 @@ export default async function ProjectDetailPage({ params }: Props) {
       <SideTabs t={t} />
 
       <main className="pt-[76px] xl:pt-[96px]">
-        {/* Breadcrumb (the project title lives in the film intro) */}
+        {/* Title */}
         <div className="border-b border-neutral-200 bg-white">
-          <div className={cn(container, "flex flex-wrap items-center justify-between gap-3 py-3.5")}>
-            <nav aria-label="Breadcrumb">
-              <ol className="flex flex-wrap items-center gap-2 text-[13px] text-neutral-500">
-                <li>
-                  <Link href={`/${lang}`} className="hover:text-brand">
-                    {t.projectsPage.breadcrumbHome}
-                  </Link>
-                </li>
-                <li aria-hidden="true">—</li>
-                <li>
-                  <Link href={listHref} className="hover:text-brand">
-                    {t.projectsPage.title}
-                  </Link>
-                </li>
-                <li aria-hidden="true">—</li>
-                <li aria-current="page" className="text-neutral-800">
-                  {project.name}
-                </li>
-              </ol>
-            </nav>
-            <span className="flex items-center gap-2">
-              <Tag>{project.category}</Tag>
-              {project.isNew && (
-                <span className="rounded-[3px] border border-neutral-300 px-2 py-0.5 font-en text-[12px] font-semibold text-brand">
-                  NEW
-                </span>
-              )}
-            </span>
+          <div className={cn(container, "pt-10 pb-10 lg:pt-12 lg:pb-12")}>
+            <h1 className="text-[28px] leading-[1.4] font-bold text-brand-dark sm:text-[34px]">
+              {project.name}
+            </h1>
+            <p className="mt-2 text-[15px] text-neutral-600">
+              {project.location}
+              <span className="mx-2 text-neutral-300" aria-hidden="true">|</span>
+              {project.structure}
+            </p>
           </div>
         </div>
 
-        {/* Scroll-scrubbed project film: concept → construction → home */}
-        <ProjectFilm
-          locale={t.locale}
-          title={project.name}
-          tagline={d.introTagline}
-          meta={`${project.location} · ${project.structure}`}
-          image={project.imageLarge}
-          siteImage={film.site}
-          interiorImage={film.interior}
-          scenes={d.scenes}
-          plan={buildFloorPlan(project)}
-          planLabels={d.plan}
-          labels={{ simTitle: d.simTitle, scrollHint: d.scrollHint, skip: d.skip }}
-          skipTo="#thong-tin"
-        />
+        {/* Interactive BIM model (three.js) */}
+        <section aria-label={model.title} className="bg-white pt-12 lg:pt-16">
+          <div className={container}>
+            <HouseModel3D locale={lang} />
+          </div>
+        </section>
 
         {/* Project information */}
         <section
@@ -163,7 +130,6 @@ export default async function ProjectDetailPage({ params }: Props) {
                 alt={project.name}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                loading="eager" // same file as the film intro: already downloaded
                 className="object-cover"
               />
             </div>

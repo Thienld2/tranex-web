@@ -11,6 +11,8 @@ const basePath = staticExport ? (process.env.PAGES_BASE_PATH ?? "") : ""
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@workspace/ui"],
+  // Hide the floating "N" dev-tools button (dev only; errors still show).
+  devIndicators: false,
   // Folder-per-page output (/vi/index.html, /vi/du-an/index.html) so any
   // static host serves clean URLs without rewrite rules.
   ...(staticExport && { output: "export", trailingSlash: true }),

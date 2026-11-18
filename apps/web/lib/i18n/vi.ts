@@ -307,69 +307,6 @@ export const vi: Content = {
     last: "Cuối",
   },
   projectDetail: {
-    simTitle: "Mô phỏng quá trình thi công",
-    scrollHint: "Cuộn xuống để xem hành trình",
-    skip: "Bỏ qua",
-    introTagline: "Hành trình từ bản vẽ đến tổ ấm",
-    plan: {
-      title: "Mặt bằng tổng thể",
-      scale: "Tỉ lệ 1:200",
-      street: "Đường chính",
-      sidewalk: "Vỉa hè",
-      sea: "Biển",
-      garden: "Sân vườn",
-      rooms: {
-        living: "P. khách",
-        kitchen: "Bếp",
-        bed: "P. ngủ",
-        bath: "WC",
-        garage: "Gara",
-        stair: "Cầu thang",
-        terrace: "Hiên",
-      },
-    },
-    scenes: [
-      {
-        label: "Ý tưởng & bản vẽ",
-        before: "Từ",
-        accent: "ý tưởng",
-        after: "",
-        description:
-          "Phác thảo, bản vẽ kiến trúc và mô hình BIM 3D – mọi chi tiết được tính toán trước khi khởi công.",
-      },
-      {
-        label: "Móng & kết cấu",
-        before: "đến",
-        accent: "thi công",
-        after: "",
-        description:
-          "Thi công móng, cột, dầm, sàn với quy trình kiểm soát chất lượng chặt chẽ sau mỗi đợt đổ bê tông.",
-      },
-      {
-        label: "Hoàn thiện",
-        before: "đến",
-        accent: "hoàn thiện",
-        after: "",
-        description:
-          "Xây thô, lợp mái, sơn bả, ốp lát, lắp kính – từng lớp vật liệu dần hiện thành hình.",
-      },
-      {
-        label: "Bàn giao",
-        before: "đến",
-        accent: "tổ ấm",
-        after: "",
-        description:
-          "Ngôi nhà được nghiệm thu và bàn giao, sẵn sàng cho những khoảnh khắc đầu tiên của gia chủ.",
-      },
-      {
-        label: "Không gian sống",
-        before: "Chào mừng",
-        accent: "về nhà",
-        after: "",
-        description:
-          "Bước vào bên trong – nơi ánh sáng, vật liệu và công năng hòa quyện cho cuộc sống mỗi ngày.",
-      },
-    ],
     infoTitle: "Thông tin dự án",
     fields: {
       category: "Loại công trình",

@@ -135,40 +135,6 @@ export type Content = {
     last: string
   }
   projectDetail: {
-    simTitle: string
-    scrollHint: string
-    skip: string
-    /** Sub-headline under the project name in the film intro. */
-    introTagline: string
-    /** Labels drawn on the generated site plan. */
-    plan: {
-      title: string
-      scale: string
-      street: string
-      sidewalk: string
-      sea: string
-      garden: string
-      rooms: {
-        living: string
-        kitchen: string
-        bed: string
-        bath: string
-        garage: string
-        stair: string
-        terrace: string
-      }
-    }
-    /**
-     * Film scenes after the intro: concept → construction → finishes →
-     * home → interior. Caption = before + accent (script) + after.
-     */
-    scenes: {
-      label: string
-      before: string
-      accent: string
-      after: string
-      description: string
-    }[]
     infoTitle: string
     fields: {
       category: string
