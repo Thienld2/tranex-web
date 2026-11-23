@@ -18,11 +18,9 @@ import {
   componentKey,
   countByLayer,
   type El,
-  GRID_X,
-  GRID_X_NAMES,
-  GRID_Z,
-  GRID_Z_NAMES,
   GROUND_LEVEL,
+  type HouseModel,
+  type HouseSpec,
   type Info,
   type Layer,
   type MatKey,
@@ -48,13 +46,23 @@ const LAYER_COLOR: Record<Layer, string> = {
 }
 
 /**
- * Interactive three.js model of a single-storey house: RC frame (footings,
- * columns, beams, slabs), architecture and exposed MEP water piping.
- * Top-right panel toggles layers; clicking a component shows its size and
- * material.
+ * Interactive three.js model of a project's house, generated from its spec:
+ * RC frame (footings, columns, beams, slabs), architecture and exposed MEP
+ * water piping. Top-right panel toggles layers; clicking a component shows
+ * its size and material.
  */
-export function HouseModel3D({ locale }: { locale: Locale }) {
-  const txt = modelText(locale)
+export function HouseModel3D({
+  locale,
+  spec,
+  name,
+}: {
+  locale: Locale
+  spec: HouseSpec
+  /** Project name, for the accessible label. */
+  name: string
+}) {
+  const txt = modelText(locale, name)
+  const model = useMemo(() => buildHouse(locale, spec), [locale, spec])
   const hostRef = useRef<HTMLDivElement>(null)
   const apiRef = useRef<Api | null>(null)
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading")
@@ -71,7 +79,7 @@ export function HouseModel3D({ locale }: { locale: Locale }) {
   useEffect(() => {
     if (window.matchMedia("(max-width: 767px)").matches) setPanelOpen(false)
   }, [])
-  const counts = useMemo(() => countByLayer(buildHouse(locale)), [locale])
+  const counts = useMemo(() => countByLayer(model.els), [model])
 
   useEffect(() => {
     let disposed = false
@@ -88,7 +96,7 @@ export function HouseModel3D({ locale }: { locale: Locale }) {
           THREE,
           OrbitControls,
           hostRef.current,
-          buildHouse(locale),
+          model,
           (sel) => {
             setSelected(sel)
             // picking a component re-opens the panel so its info is visible
@@ -109,7 +117,7 @@ export function HouseModel3D({ locale }: { locale: Locale }) {
       cleanup()
       apiRef.current = null
     }
-  }, [locale])
+  }, [model])
 
   const toggleLayer = (layer: Layer) => {
     const next = !visible[layer]
@@ -319,9 +327,18 @@ function mountScene(
   THREE: Three,
   OrbitControls: typeof import("three/examples/jsm/controls/OrbitControls.js").OrbitControls,
   host: HTMLElement,
-  els: El[],
+  model: HouseModel,
   onSelect: (s: Selected) => void
 ): { dispose: () => void; api: Api } {
+  const { els, grid, house, site } = model
+  // Model extents drive the camera, ground, shadows and grid.
+  const cx = (site.min[0] + site.max[0]) / 2
+  const cz = (site.min[2] + site.max[2]) / 2
+  const siteW = site.max[0] - site.min[0]
+  const siteD = site.max[2] - site.min[2]
+  const height = house.max[1]
+  const radius = Math.max(Math.hypot(siteW, siteD) / 2, height * 0.9, 6.5)
+  const scale = radius / 6.5
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.outputColorSpace = THREE.SRGBColorSpace
@@ -332,9 +349,12 @@ function mountScene(
   host.appendChild(renderer.domElement)
 
   const scene = new THREE.Scene()
-  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 200)
-  const HOME_POS = new THREE.Vector3(19, 10, 18.5)
-  const HOME_TARGET = new THREE.Vector3(7.2, 0.5, 3.4)
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 400)
+  const CENTER = new THREE.Vector3(cx, 0.5 + Math.max(0, height - 5) * 0.2, cz)
+  const HOME_TARGET = CENTER.clone().add(new THREE.Vector3(1.8 * scale, 0, -0.2 * scale))
+  const HOME_POS = HOME_TARGET.clone().add(
+    new THREE.Vector3(11.8, 9.5, 15.1).multiplyScalar(scale)
+  )
   camera.position.copy(HOME_POS)
 
   const controls = new OrbitControls(camera, renderer.domElement)
@@ -342,24 +362,25 @@ function mountScene(
   controls.enableDamping = true
   controls.dampingFactor = 0.08
   controls.minDistance = 3
-  controls.maxDistance = 60
+  controls.maxDistance = 60 * scale
   controls.maxPolarAngle = Math.PI * 0.62
   controls.update()
 
   // Lighting
   scene.add(new THREE.HemisphereLight("#eaf3ff", "#6f7d5c", 1.1))
   const sun = new THREE.DirectionalLight("#fff6e8", 2.2)
-  sun.position.set(15, 22, 16)
-  sun.target.position.set(5.4, 0, 3.6)
+  sun.position.set(cx + 9.6 * scale, 22 * scale, cz + 12.4 * scale)
+  sun.target.position.set(cx, 0, cz)
   sun.castShadow = true
   sun.shadow.mapSize.set(2048, 2048)
+  const sh = 14 * scale
   Object.assign(sun.shadow.camera, {
-    left: -14,
-    right: 14,
-    top: 14,
-    bottom: -14,
+    left: -sh,
+    right: sh,
+    top: sh,
+    bottom: -sh,
     near: 1,
-    far: 70,
+    far: 70 * scale,
   })
   sun.shadow.bias = -0.0004
   sun.shadow.normalBias = 0.02
@@ -376,13 +397,25 @@ function mountScene(
       metalness: 0,
       ...extra,
     })
+  const double = { side: THREE.DoubleSide }
   const MATS: Record<MatKey, THREE_NS.MeshStandardMaterial> = {
     concrete: std("#b9bbb7", { roughness: 0.92 }),
     roofSlab: std("#b9bbb7", { roughness: 0.92 }),
+    roofWhite: std("#f3f2ee", { roughness: 0.9 }),
+    roofDark: std("#2c2e30", { roughness: 0.7 }),
     footing: std("#a6a9a3", { roughness: 0.95 }),
     lean: std("#8d8f89", { roughness: 1 }),
-    wall: std("#f4f0e7", { roughness: 0.95 }),
-    frame: std("#4b5258", { roughness: 0.5, metalness: 0.3 }),
+    white: std("#f4f2ec", { roughness: 0.95 }),
+    beige: std("#e2d3b9", { roughness: 0.9 }),
+    stone: std("#b9a890", { roughness: 0.9 }),
+    wood: std("#9a5a36", { roughness: 0.7 }),
+    darkWood: std("#4a3426", { roughness: 0.75 }),
+    timber: std("#c49a6c", { roughness: 0.75 }),
+    dark: std("#25272a", { roughness: 0.6 }),
+    panel: std("#878c90", { roughness: 0.7 }),
+    sage: std("#9ba68e", { roughness: 0.9 }),
+    siding: std("#f1f0ea", { roughness: 0.85 }),
+    frame: std("#2f3438", { roughness: 0.5, metalness: 0.3 }),
     glass: new THREE.MeshPhysicalMaterial({
       color: "#a9d4ee",
       roughness: 0.05,
@@ -390,31 +423,68 @@ function mountScene(
       opacity: 0.35,
       depthWrite: false,
     }),
-    wood: std("#8b5a3c", { roughness: 0.7 }),
+    doorWood: std("#7a4a2c", { roughness: 0.7 }),
     steelDoor: std("#6e4b36", { roughness: 0.6, metalness: 0.2 }),
-    tile: std("#e6dfd2", { roughness: 0.6 }),
+    garage: std("#3a3d40", { roughness: 0.55, metalness: 0.3 }),
+    floorTile: std("#e6dfd2", { roughness: 0.6 }),
     counter: std("#cfc8bb", { roughness: 0.6 }),
-    stone: std("#bdb6aa", { roughness: 0.7 }),
+    paving: std("#d8d3c9", { roughness: 0.85 }),
+    deck: std("#a57650", { roughness: 0.8 }),
+    water: std("#3fb3d6", {
+      roughness: 0.1,
+      transparent: true,
+      opacity: 0.8,
+    }),
+    roofTile: std("#3b3f44", { roughness: 0.8, ...double }),
+    terracotta: std("#b4603d", { roughness: 0.85, ...double }),
+    metalRoof: std("#5b6166", { roughness: 0.5, metalness: 0.4, ...double }),
+    soffitWood: std("#b07a4c", { roughness: 0.7 }),
+    soffitWhite: std("#f5f5f2", { roughness: 0.9 }),
+    screen: std("#f2f2ef", { roughness: 0.8 }),
+    railMetal: std("#c9ced2", { roughness: 0.35, metalness: 0.6 }),
     pipeCold: std("#2b78e4", { roughness: 0.4 }),
     pipeHot: std("#e04a3f", { roughness: 0.4 }),
     pipeDrain: std("#8c96a0", { roughness: 0.5 }),
     pipeRain: std("#d1d6db", { roughness: 0.5 }),
+    pipePool: std("#18a39a", { roughness: 0.4 }),
     steel: std("#7d858c", { roughness: 0.45, metalness: 0.5 }),
     inox: std("#dfe3e7", { roughness: 0.3, metalness: 0.45 }),
     ceramic: std("#fbfbfa", { roughness: 0.25 }),
     pit: std("#7b6f63", { roughness: 1 }),
+    solar: std("#1d2c4a", { roughness: 0.25, metalness: 0.5 }),
+    trunk: std("#6b5444", { roughness: 1 }),
+    leaves: std("#5c8a4b", { roughness: 0.9, flatShading: true }),
   }
-  // Materials made see-through by the x-ray toggle: architecture + roof slab.
+  // Materials made see-through by the x-ray toggle: architecture + roofs.
   const XRAY_MATS: MatKey[] = [
-    "wall",
+    "white",
+    "beige",
+    "stone",
+    "wood",
+    "darkWood",
+    "timber",
+    "dark",
+    "panel",
+    "sage",
+    "siding",
     "frame",
     "glass",
-    "wood",
+    "doorWood",
     "steelDoor",
-    "tile",
+    "garage",
+    "floorTile",
     "counter",
-    "stone",
     "roofSlab",
+    "roofWhite",
+    "roofDark",
+    "roofTile",
+    "terracotta",
+    "metalRoof",
+    "soffitWood",
+    "soffitWhite",
+    "screen",
+    "railMetal",
+    "leaves",
   ]
   const xrayMats = new Set<THREE_NS.Material>(XRAY_MATS.map((k) => MATS[k]))
   const baseOpacity = new Map<THREE_NS.Material, number>()
@@ -469,9 +539,78 @@ function mountScene(
   for (const el of els) {
     const parent = groups[el.layer]
     switch (el.kind) {
-      case "box":
-        box(el, el.size, el.center, MATS[el.mat], parent)
+      case "box": {
+        const m = box(el, el.size, el.center, MATS[el.mat], parent)
+        if (el.rotation) m.rotation.set(...el.rotation)
         break
+      }
+      case "roof": {
+        const geom = roofGeometry(THREE, el)
+        addMesh(el, geom, MATS[el.mat], parent)
+        break
+      }
+      case "tree": {
+        const g = new THREE.Group()
+        g.position.set(...el.center)
+        parent.add(g)
+        const trunkH = el.form === "pine" ? el.height * 0.35 : el.height * 0.55
+        const trunk = addMesh(
+          el,
+          new THREE.CylinderGeometry(0.16 * (el.height / 10), 0.3 * (el.height / 10), trunkH, 10),
+          MATS.trunk,
+          g
+        )
+        trunk.position.y = trunkH / 2
+        if (el.form === "pine") {
+          // stacked cones
+          for (let i = 0; i < 3; i++) {
+            const h = el.height * (0.42 - i * 0.06)
+            const cone = addMesh(
+              el,
+              new THREE.ConeGeometry(el.radius * (1 - i * 0.25), h, 9),
+              MATS.leaves,
+              g
+            )
+            cone.position.y = trunkH * 0.7 + i * el.height * 0.2 + h / 2
+          }
+        } else {
+          // a few low-poly blobs forming a wide crown
+          const r = el.radius
+          const blobs: [number, number, number, number][] = [
+            [0, 0, 0, 0.62],
+            [0.48, -0.1, 0.2, 0.5],
+            [-0.45, -0.05, -0.15, 0.52],
+            [0.1, 0.05, -0.5, 0.46],
+            [-0.15, -0.12, 0.5, 0.45],
+            [0.05, 0.3, 0.05, 0.45],
+          ]
+          for (const [dx, dy, dz, s] of blobs) {
+            const b = addMesh(el, new THREE.IcosahedronGeometry(r * s, 1), MATS.leaves, g)
+            b.position.set(dx * r, el.height - r * 0.55 + dy * r, dz * r)
+            b.scale.y = 0.72
+          }
+          // main limbs
+          for (const [ax, az] of [
+            [0.6, 0.3],
+            [-0.5, -0.2],
+            [0.1, -0.6],
+          ] as const) {
+            const limbLen = r * 0.7
+            const limb = addMesh(
+              el,
+              new THREE.CylinderGeometry(0.08 * (el.height / 10), 0.16 * (el.height / 10), limbLen, 8),
+              MATS.trunk,
+              g
+            )
+            const dir = new THREE.Vector3(ax, 1, az).normalize()
+            limb.position
+              .set(0, trunkH, 0)
+              .add(dir.clone().multiplyScalar(limbLen / 2))
+            limb.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir)
+          }
+        }
+        break
+      }
       case "cyl": {
         const m = addMesh(
           el,
@@ -486,8 +625,14 @@ function mountScene(
         const shape = new THREE.Shape()
         shape.moveTo(0, 0)
         shape.lineTo(el.length, 0)
-        shape.lineTo(el.length, el.height)
-        shape.lineTo(0, el.height)
+        if (el.top?.length) {
+          // gabled / sloped top, traced right → left
+          for (const [t, extra] of [...el.top].sort((a, b) => b[0] - a[0]))
+            shape.lineTo(t, el.height + extra)
+        } else {
+          shape.lineTo(el.length, el.height)
+          shape.lineTo(0, el.height)
+        }
         shape.closePath()
         for (const o of el.openings) {
           const hole = new THREE.Path()
@@ -550,8 +695,16 @@ function mountScene(
         box(el, [w, f, d], [0, -h / 2 + f / 2, 0], MATS.frame, g)
         box(el, [f, h, d], [-w / 2 + f / 2, 0, 0], MATS.frame, g)
         box(el, [f, h, d], [w / 2 - f / 2, 0, 0], MATS.frame, g)
-        if (w > 1.2)
-          box(el, [0.04, h - 2 * f, d * 0.8], [0, 0, 0], MATS.frame, g)
+        // mullions about every 1.4 m
+        const mullions = Math.max(0, Math.ceil(w / 1.4) - 1)
+        for (let i = 1; i <= mullions; i++)
+          box(
+            el,
+            [0.04, h - 2 * f, d * 0.8],
+            [-w / 2 + (w * i) / (mullions + 1), 0, 0],
+            MATS.frame,
+            g
+          )
         box(el, [w - 2 * f, h - 2 * f, 0.012], [0, 0, 0], MATS.glass, g)
         break
       }
@@ -609,12 +762,24 @@ function mountScene(
               MATS.glass,
               g
             )
+          } else if (el.style === "garage") {
+            // sectional door: horizontal panels
+            const n = 5
+            const ph = (h - f) / n
+            for (let p = 0; p < n; p++)
+              box(
+                el,
+                [leafW - 0.01, ph - 0.02, 0.05],
+                [x, -h / 2 + ph * (p + 0.5), 0],
+                MATS.garage,
+                g
+              )
           } else {
             box(
               el,
               [leafW - 0.01, h - f - 0.01, 0.04],
               [x, -f / 2, 0],
-              el.style === "wood" ? MATS.wood : MATS.steelDoor,
+              el.style === "wood" ? MATS.doorWood : MATS.steelDoor,
               g
             )
           }
@@ -626,7 +791,7 @@ function mountScene(
 
   // Ground (semi-transparent so the foundations stay visible)
   const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(40, 32),
+    new THREE.PlaneGeometry(siteW + 30, siteD + 26),
     new THREE.MeshStandardMaterial({
       color: "#86a873",
       roughness: 1,
@@ -636,7 +801,7 @@ function mountScene(
     })
   )
   ground.rotation.x = -Math.PI / 2
-  ground.position.set(5.4, GROUND_LEVEL - 0.002, 3.6)
+  ground.position.set(cx, GROUND_LEVEL - 0.002, cz)
   ground.receiveShadow = true
   scene.add(ground)
 
@@ -686,13 +851,15 @@ function mountScene(
     l.computeLineDistances()
     gridGroup.add(l)
   }
-  GRID_X.forEach((x, i) => {
-    line([x, y, -1.9], [x, y, 9.1])
-    bubble(GRID_X_NAMES[i]!, [x, y + 0.3, 9.5])
+  const [hx0, , hz0] = house.min
+  const [hx1, , hz1] = house.max
+  grid.xs.forEach((x, i) => {
+    line([x, y, hz0 - 1.9], [x, y, hz1 + 1.9])
+    bubble(grid.xNames[i]!, [x, y + 0.3, hz1 + 2.3])
   })
-  GRID_Z.forEach((z, j) => {
-    line([-1.9, y, z], [12.7, y, z])
-    bubble(GRID_Z_NAMES[j]!, [-2.3, y + 0.3, z])
+  grid.zs.forEach((z, j) => {
+    line([hx0 - 1.9, y, z], [hx1 + 1.9, y, z])
+    bubble(grid.zNames[j]!, [hx0 - 2.3, y + 0.3, z])
   })
 
   /* ---------- selection ---------- */
@@ -795,8 +962,7 @@ function mountScene(
   const homeView = () => {
     const a = camera.aspect || 1.6
     const f = Math.min(2.3, Math.max(1, 1.75 / a))
-    const target =
-      a < 1.2 ? new THREE.Vector3(5.4, 0.5, 3.6) : HOME_TARGET.clone()
+    const target = a < 1.2 ? CENTER.clone() : HOME_TARGET.clone()
     camera.position
       .copy(target)
       .add(HOME_POS.clone().sub(HOME_TARGET).multiplyScalar(f))
@@ -891,4 +1057,52 @@ function mountScene(
   }
 
   return { dispose, api }
+}
+
+/** Pitched roof surface (gable / hip / shed) as a flat-shaded geometry. */
+function roofGeometry(
+  THREE: Three,
+  el: Extract<El, { kind: "roof" }>
+): THREE_NS.BufferGeometry {
+  const { y, rise, overhang: o, ridge } = el
+  // local frame: u along the ridge, v across it
+  const [U0, U1] = ridge === "x" ? el.x : el.z
+  const [V0, V1] = ridge === "x" ? el.z : el.x
+  const P = (u: number, h: number, v: number): V3 =>
+    ridge === "x" ? [u, h, v] : [v, h, u]
+  const tris: V3[] = []
+  const quad = (a: V3, b: V3, c: V3, d: V3) => tris.push(a, b, c, a, c, d)
+
+  if (el.shape === "shed") {
+    const high = el.up === "front" || el.up === "right" ? V1 : V0
+    const low = high === V1 ? V0 : V1
+    const h = (v: number) => y + (rise * (v - low)) / (high - low)
+    quad(
+      P(U0 - o, h(V0 - o), V0 - o),
+      P(U1 + o, h(V0 - o), V0 - o),
+      P(U1 + o, h(V1 + o), V1 + o),
+      P(U0 - o, h(V1 + o), V1 + o)
+    )
+  } else {
+    const d = (V1 - V0) / 2
+    const vc = (V0 + V1) / 2
+    const ye = y - (o * rise) / d
+    const yr = y + rise
+    let r0 = U0 - o
+    let r1 = U1 + o
+    if (el.shape === "hip") {
+      r0 = U0 + d
+      r1 = U1 - d
+      if (r0 > r1) r0 = r1 = (U0 + U1) / 2
+      tris.push(P(U0 - o, ye, V0 - o), P(U0 - o, ye, V1 + o), P(r0, yr, vc))
+      tris.push(P(U1 + o, ye, V1 + o), P(U1 + o, ye, V0 - o), P(r1, yr, vc))
+    }
+    quad(P(U0 - o, ye, V1 + o), P(U1 + o, ye, V1 + o), P(r1, yr, vc), P(r0, yr, vc))
+    quad(P(U1 + o, ye, V0 - o), P(U0 - o, ye, V0 - o), P(r0, yr, vc), P(r1, yr, vc))
+  }
+
+  const geom = new THREE.BufferGeometry()
+  geom.setAttribute("position", new THREE.Float32BufferAttribute(tris.flat(), 3))
+  geom.computeVertexNormals()
+  return geom
 }

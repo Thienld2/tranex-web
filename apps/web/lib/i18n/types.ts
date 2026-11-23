@@ -69,9 +69,37 @@ export type Content = {
     notice: { tag: string; title: string; image: string; href: string }
   }
   news: { title: string; items: { date: string; tag: string; title: string }[] }
-  events: {
+  events: { title: string }
+  eventsPage: {
+    metaTitle: string
+    metaDescription: string
+    breadcrumbHome: string
     title: string
-    items: { tags: string[]; date: string; title: string; image: string }[]
+    listTitle: string
+    updated: string
+    /** "{n}" is replaced by the number of results. */
+    resultCount: string
+    fields: { date: string; venue: string; time: string }
+    status: { upcoming: string; ongoing: string; ended: string }
+    prev: string
+    next: string
+    last: string
+  }
+  eventDetail: {
+    free: string
+    reservation: string
+    fields: { date: string; venue: string; time: string; access: string }
+    mapLink: string
+    buildingTitle: string
+    programTitle: string
+    ctaTitle: string
+    ctaText: string
+    ctaButton: string
+    ctaEnded: string
+    copyLink: string
+    copied: string
+    backToList: string
+    otherTitle: string
   }
   consulting: {
     label: string

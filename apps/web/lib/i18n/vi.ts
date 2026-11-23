@@ -155,7 +155,7 @@ export const vi: Content = {
       tag: "Sự kiện",
       title: "Triển lãm công trình TRANEX 2026",
       image: img.notice,
-      href: "#tin-tuc",
+      href: "/vi/su-kien/trien-lam-tranex-2026-ha-noi",
     },
   },
   news: {
@@ -183,22 +183,38 @@ export const vi: Content = {
       },
     ],
   },
-  events: {
+  events: { title: "Sự kiện" },
+  eventsPage: {
+    metaTitle: "Sự kiện | TRANEX",
+    metaDescription:
+      "Lịch tham quan công trình hoàn thiện, tham quan kết cấu đang thi công, triển lãm và hội thảo của TRANEX trên toàn quốc.",
+    breadcrumbHome: "Trang chủ",
     title: "Sự kiện",
-    items: [
-      {
-        tags: ["Tham quan", "Công trình"],
-        date: "26/11/2026 (Thứ 5) – 27/11/2026 (Thứ 6)",
-        title: "[TP. Hồ Chí Minh] Tham quan công trình chung cư vừa hoàn thiện",
-        image: img.eventApartment,
-      },
-      {
-        tags: ["Triển lãm", "Sự kiện"],
-        date: "24/11/2026 (Thứ 3) – 25/11/2026 (Thứ 4)",
-        title: "[Hà Nội] Triển lãm công trình & giải pháp TRANEX 2026",
-        image: img.eventExpo,
-      },
-    ],
+    listTitle: "Danh sách sự kiện",
+    updated: "Cập nhật",
+    resultCount: "{n} sự kiện",
+    fields: { date: "Ngày tổ chức", venue: "Địa điểm", time: "Thời gian" },
+    status: { upcoming: "Đang nhận đăng ký", ongoing: "Đang diễn ra", ended: "Đã kết thúc" },
+    prev: "Trang trước",
+    next: "Trang sau",
+    last: "Cuối",
+  },
+  eventDetail: {
+    free: "Miễn phí tham dự",
+    reservation: "Đặt lịch trước",
+    fields: { date: "Ngày tổ chức", venue: "Địa điểm", time: "Thời gian", access: "Ghi chú" },
+    mapLink: "Xem bản đồ",
+    buildingTitle: "Công trình tham quan",
+    programTitle: "Nội dung chương trình",
+    ctaTitle: "Đăng ký tham dự & liên hệ",
+    ctaText:
+      "Vui lòng đăng ký trước để TRANEX sắp xếp lịch và người hướng dẫn phù hợp. Mọi thắc mắc xin liên hệ hotline.",
+    ctaButton: "Đăng ký tham dự",
+    ctaEnded: "Sự kiện đã kết thúc. Liên hệ TRANEX để đặt lịch tham quan các công trình khác.",
+    copyLink: "Sao chép đường dẫn",
+    copied: "Đã sao chép đường dẫn",
+    backToList: "Quay lại danh sách sự kiện",
+    otherTitle: "Sự kiện khác",
   },
   consulting: {
     label: "Tư vấn thiết kế · Giải pháp xây dựng",

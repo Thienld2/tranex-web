@@ -234,7 +234,7 @@ function SelectField({
   )
 }
 
-function Pagination({
+export function Pagination({
   page,
   pageCount,
   onChange,
@@ -243,7 +243,7 @@ function Pagination({
   page: number
   pageCount: number
   onChange: (n: number) => void
-  labels: Content["projectsPage"]
+  labels: { prev: string; next: string; last: string }
 }) {
   const cell =
     "grid size-11 place-items-center rounded-[3px] border font-en text-[15px] font-semibold transition-colors"

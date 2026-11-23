@@ -14,6 +14,7 @@ import { SideTabs } from "@/components/side-tabs"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { modelText } from "@/lib/house-model"
+import { getHouseSpec } from "@/lib/house-specs"
 import { getContent, hasLocale } from "@/lib/i18n"
 import { getProject, getProjectIds, getRelatedProjects } from "@/lib/projects"
 
@@ -48,7 +49,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   const d = t.projectDetail
   const listHref = `/${lang}/du-an`
   const related = getRelatedProjects(lang, id)
-  const model = modelText(lang)
+  const model = modelText(lang, project.name)
 
   const info: [string, React.ReactNode][] = [
     [d.fields.category, project.category],
@@ -96,7 +97,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         {/* Interactive BIM model (three.js) */}
         <section aria-label={model.title} className="bg-white pt-12 lg:pt-16">
           <div className={container}>
-            <HouseModel3D locale={lang} />
+            <HouseModel3D locale={lang} spec={getHouseSpec(id)} name={project.name} />
           </div>
         </section>
 

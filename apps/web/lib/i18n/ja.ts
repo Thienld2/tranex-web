@@ -142,7 +142,7 @@ export const ja: Content = {
       tag: "イベント",
       title: "TRANEX建築展示会2026",
       image: img.notice,
-      href: "#tin-tuc",
+      href: "/ja/su-kien/trien-lam-tranex-2026-ha-noi",
     },
   },
   news: {
@@ -170,22 +170,38 @@ export const ja: Content = {
       },
     ],
   },
-  events: {
+  events: { title: "イベント情報" },
+  eventsPage: {
+    metaTitle: "イベント情報 | TRANEX",
+    metaDescription:
+      "TRANEXの竣工見学会・構造見学会・建物博覧会・セミナーの開催情報をご案内します。",
+    breadcrumbHome: "ホーム",
     title: "イベント情報",
-    items: [
-      {
-        tags: ["見学会", "竣工物件"],
-        date: "2026年11月26日(木)・27日(金)",
-        title: "【ホーチミン市】竣工マンション見学会を開催",
-        image: img.eventApartment,
-      },
-      {
-        tags: ["展示会", "イベント"],
-        date: "2026年11月24日(火)・25日(水)",
-        title: "【ハノイ】TRANEX建築・ソリューション展示会2026",
-        image: img.eventExpo,
-      },
-    ],
+    listTitle: "イベント一覧",
+    updated: "更新日",
+    resultCount: "{n}件",
+    fields: { date: "開催日", venue: "場所", time: "開催時間" },
+    status: { upcoming: "受付中", ongoing: "開催中", ended: "終了" },
+    prev: "前へ",
+    next: "次へ",
+    last: "最後",
+  },
+  eventDetail: {
+    free: "参加無料",
+    reservation: "完全予約",
+    fields: { date: "開催日", venue: "場所", time: "開催時間", access: "備考" },
+    mapLink: "地図を見る",
+    buildingTitle: "開催物件",
+    programTitle: "プログラム",
+    ctaTitle: "お問い合わせ・ご予約はこちらから",
+    ctaText:
+      "ご見学は事前予約制です。日時・人数をお知らせください。ご不明な点はお電話でもお気軽にどうぞ。",
+    ctaButton: "見学を予約する",
+    ctaEnded: "本イベントは終了しました。その他の物件のご見学はお問い合わせください。",
+    copyLink: "このページのURLをコピー",
+    copied: "URLをコピーしました",
+    backToList: "一覧へ戻る",
+    otherTitle: "その他のイベント",
   },
   consulting: {
     label: "設計コンサルティング・建設ソリューション",

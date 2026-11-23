@@ -89,7 +89,7 @@ export function SideTabsClient({ locale, tabLabels, company, ui }: SideTabsProps
           <BookIcon className={tabIcon} strokeWidth={1.6} />
           <span className={tabText}>{tabLabels[0]}</span>
         </button>
-        <Link href={`/${locale}#tin-tuc`} className={cn(tab, "bg-brand hover:bg-[#17a058]")}>
+        <Link href={`/${locale}/su-kien`} className={cn(tab, "bg-brand hover:bg-[#17a058]")}>
           <EventIcon className={tabIcon} strokeWidth={1.6} />
           <span className={tabText}>{tabLabels[1]}</span>
         </Link>

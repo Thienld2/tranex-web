@@ -28,8 +28,6 @@ export const img = {
   navTypes: unsplash("photo-1600585154340-be6161a56a0c", 500),
   navCompany: unsplash("photo-1486406146926-c627a92ad1ab", 500),
 
-  eventApartment: unsplash("photo-1545324418-cc1a3fa10c00", 700),
-  eventExpo: unsplash("photo-1582268611958-ebfd161ef9cf", 700),
   notice: unsplash("photo-1582268611958-ebfd161ef9cf", 400),
 
   aboutCompany: unsplash("photo-1486406146926-c627a92ad1ab", 900),

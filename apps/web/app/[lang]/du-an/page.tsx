@@ -48,7 +48,8 @@ export default async function ProjectsPage({ params }: Props) {
       <main className="pt-[76px] xl:pt-[96px]">
         {/* Breadcrumb + title */}
         <div className="border-b border-neutral-200 bg-white">
-          <div className={cn(container, "pt-6 pb-10 lg:pb-12")}>
+          <div className={cn(container, "py-6")}>
+            <h1 className="sr-only">{p.title}</h1>
             <nav aria-label="Breadcrumb">
               <ol className="flex items-center gap-2 text-[13px] text-neutral-500">
                 <li>
@@ -62,9 +63,6 @@ export default async function ProjectsPage({ params }: Props) {
                 </li>
               </ol>
             </nav>
-            <h1 className="mt-8 text-[28px] leading-[1.4] font-bold text-brand-dark sm:text-[34px]">
-              {p.title}
-            </h1>
           </div>
         </div>
 
